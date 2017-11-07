@@ -2,15 +2,23 @@ require 'sinatra/base'
 
 class Battle < Sinatra::Base
   set :port, 5000
+  enable :sessions
+
 
   get '/' do
     erb(:index)
   end
 
-  post '/opening' do
-    @p1 = params["player1"]
-    @p2 = params["player2"]
-    erb(:opening)
+  get '/play' do
+    @p1 = session["player1"]
+    @p2 = session["player2"]
+    erb(:play)
+  end
+
+  post '/names' do
+    session['player1'] = params["player1"]
+    session['player2'] = params["player2"]
+    redirect '/play'
   end
 
   # start the server if ruby file executed directly
